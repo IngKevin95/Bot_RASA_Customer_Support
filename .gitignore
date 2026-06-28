@@ -1,0 +1,35 @@
+# Entorno virtual
+venv/
+.venv/
+env/
+
+# Modelos entrenados (grandes, no van en git)
+models/
+
+# Variables de entorno con secretos
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Rasa
+.rasa/
+results/
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
