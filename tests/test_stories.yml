@@ -1,0 +1,39 @@
+version: "3.1"
+
+# Tests end-to-end: ejecutar con `rasa test`
+# Valida que el bot responda correctamente a cada flujo.
+
+tests:
+
+- story: test saludo basico
+  steps:
+    - user: "hola"
+      intent: greet
+    - bot: "Hola! Como puedo ayudarte hoy?"
+
+- story: test despedida
+  steps:
+    - user: "adios"
+      intent: goodbye
+    - bot: "Hasta pronto! Gracias por usar nuestro servicio."
+
+- story: test solicitud de ayuda
+  steps:
+    - user: "necesito ayuda"
+      intent: request_help
+    - bot: "Puedo ayudarte con: consultar saldo, hacer un pago, o escalar con un agente. Que necesitas?"
+
+- story: test flujo completo pago
+  steps:
+    - user: "hola"
+      intent: greet
+    - bot: "Hola! Como puedo ayudarte hoy?"
+    - user: "quiero pagar 500 en la cuenta 1234567"
+      intent: make_payment
+      entities:
+        - amount: "500"
+        - account_number: "1234567"
+    - action: action_process_payment
+    - user: "adios"
+      intent: goodbye
+    - bot: "Hasta pronto! Gracias por usar nuestro servicio."

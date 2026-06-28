@@ -1,0 +1,64 @@
+version: "3.1"
+
+stories:
+
+- story: saludo y despedida
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: goodbye
+    - action: utter_goodbye
+
+- story: consultar saldo con cuenta conocida
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: check_balance
+      entities:
+        - account_number: "1234567"
+    - action: action_check_balance
+
+- story: consultar saldo sin cuenta - pedir numero
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: check_balance
+    - action: utter_ask_account
+    - intent: inform
+      entities:
+        - account_number: "9876543"
+    - action: action_check_balance
+
+- story: pago con monto y cuenta conocidos
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: make_payment
+      entities:
+        - amount: "500"
+        - account_number: "1234567"
+    - action: action_process_payment
+    - intent: goodbye
+    - action: utter_goodbye
+
+- story: pago sin monto - pedir informacion
+  steps:
+    - intent: make_payment
+    - action: utter_ask_account
+    - intent: inform
+      entities:
+        - account_number: "4321"
+    - action: utter_ask_amount
+    - intent: inform
+      entities:
+        - amount: "200"
+    - action: action_process_payment
+
+- story: solicitar ayuda y escalar
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: request_help
+    - action: utter_help
+    - intent: request_help
+    - action: action_escalate_agent
