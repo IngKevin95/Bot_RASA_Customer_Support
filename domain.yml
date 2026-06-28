@@ -1,0 +1,58 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - check_balance
+  - make_payment
+  - request_help
+  - affirm
+  - deny
+  - inform
+
+entities:
+  - account_number
+  - amount
+
+slots:
+  account_number:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: account_number
+  amount:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: amount
+
+responses:
+  utter_greet:
+    - text: "Hola! Como puedo ayudarte hoy?"
+
+  utter_goodbye:
+    - text: "Hasta pronto! Gracias por usar nuestro servicio."
+
+  utter_ask_account:
+    - text: "Cual es tu numero de cuenta?"
+
+  utter_ask_amount:
+    - text: "Cual es el monto a pagar?"
+
+  utter_help:
+    - text: "Puedo ayudarte con: consultar saldo, hacer un pago, o escalar con un agente. Que necesitas?"
+
+  utter_out_of_scope:
+    - text: "Lo siento, no entendi tu solicitud. Puedo ayudarte con saldo, pagos o soporte general."
+
+  utter_default:
+    - text: "No estoy seguro de como ayudarte con eso. Intenta con: saldo, pago, o ayuda."
+
+actions:
+  - action_check_balance
+  - action_process_payment
+  - action_escalate_agent
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
