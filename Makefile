@@ -17,7 +17,7 @@ test: ## Corre los tests unitarios
 	pytest tests/test_actions.py
 
 test-cov: ## Tests con reporte de cobertura
-	pytest tests/test_actions.py --cov=actions --cov-report=term-missing --cov-fail-under=80
+	pytest tests/ --cov=actions --cov-report=term-missing --cov-fail-under=80
 
 test-nlu: ## Evalua el modelo NLU (requiere modelo entrenado)
 	rasa test nlu --nlu data/nlu.yml
