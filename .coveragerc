@@ -1,0 +1,10 @@
+[run]
+# chatwoot.py y genesys.py son adaptadores HTTP a servicios externos.
+# Sus llamadas de red no se testean en unit tests (requieren servicios reales).
+omit =
+    actions/providers/chatwoot.py
+    actions/providers/genesys.py
+
+[report]
+exclude_lines =
+    pragma: no cover
