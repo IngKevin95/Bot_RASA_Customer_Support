@@ -1,0 +1,23 @@
+version: "3.1"
+
+rules:
+
+- rule: responder saludo siempre
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: responder despedida siempre
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: responder ayuda
+  steps:
+    - intent: request_help
+    - action: utter_help
+
+- rule: fallback para mensajes no entendidos
+  steps:
+    - intent: nlu_fallback
+    - action: utter_default

@@ -1,0 +1,145 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hola
+    - buenos dias
+    - buenas tardes
+    - hey
+    - que tal
+    - saludos
+    - hola como estas
+    - buen dia
+    - hi
+    - hello
+    - ola
+    - hola bot
+    - buenos dias como estas
+
+- intent: goodbye
+  examples: |
+    - adios
+    - hasta luego
+    - bye
+    - nos vemos
+    - chao
+    - me tengo que ir
+    - hasta pronto
+    - hasta manana
+    - me voy
+    - gracias adios
+    - ciao
+    - hasta la vista
+    - ok adios
+
+- intent: check_balance
+  examples: |
+    - cual es mi saldo
+    - quiero saber cuanto tengo
+    - cuanto debo
+    - mi balance
+    - saldo de mi cuenta
+    - cuanto hay en mi cuenta
+    - necesito saber mi saldo
+    - ver mi saldo
+    - consultar saldo
+    - cuanto tengo disponible
+    - mostrame mi balance
+    - quiero consultar mi cuenta
+    - saldo disponible
+    - como esta mi cuenta
+    - verificar saldo
+    - cuanto dinero tengo
+    - revisar cuenta
+    - estado de cuenta
+    - mi saldo actual
+    - saldo en mi cuenta [1234567](account_number)
+    - balance de la cuenta [9876543](account_number)
+    - cuanto tengo en la cuenta [1111111](account_number)
+
+- intent: make_payment
+  examples: |
+    - quiero pagar
+    - necesito hacer un pago
+    - pagar [100](amount) en mi cuenta [1234](account_number)
+    - transferir [500](amount) desde la cuenta [5678](account_number)
+    - pago de [250](amount)
+    - transferencia de [300](amount) a la cuenta [9999](account_number)
+    - debo pagar [150](amount)
+    - realizar un pago
+    - hacer una transferencia
+    - pagar mi factura
+    - abonar a mi cuenta
+    - quiero transferir [200](amount)
+    - necesito pagar [75](amount) a la cuenta [4321](account_number)
+    - pago de [1000](amount) dolares
+    - transferir dinero
+    - hacer pago de [50](amount)
+    - abonar [500](amount) a [12345](account_number)
+    - pagar [30](amount) pesos
+    - quiero hacer un pago de [600](amount)
+    - necesito pagar una factura de [800](amount)
+
+- intent: request_help
+  examples: |
+    - necesito ayuda
+    - como funciona esto
+    - ayuda
+    - no entiendo
+    - me puedes ayudar
+    - requiero asistencia
+    - necesito soporte
+    - hay un problema
+    - tengo un problema
+    - no puedo
+    - no funciona
+    - error
+    - algo salio mal
+    - necesito hablar con alguien
+    - quiero hablar con un agente
+    - conectame con un humano
+    - soporte tecnico
+    - tiene problemas
+    - no logro hacer el pago
+    - tengo una duda
+
+- intent: affirm
+  examples: |
+    - si
+    - claro
+    - por supuesto
+    - exacto
+    - correcto
+    - asi es
+    - ok
+    - de acuerdo
+    - afirmativo
+    - si quiero
+    - confirmo
+    - procede
+
+- intent: deny
+  examples: |
+    - no
+    - no gracias
+    - para nada
+    - no es correcto
+    - incorrecto
+    - cancela
+    - olvida eso
+    - no proceder
+    - negativo
+
+- intent: inform
+  examples: |
+    - es [1234567](account_number)
+    - la cuenta es [9876543](account_number)
+    - mi cuenta es [1111111](account_number)
+    - [500](amount) dolares
+    - el monto es [200](amount)
+    - [150](amount) pesos
+    - numero [4321](account_number)
+    - cuenta [7777777](account_number)
+    - [1000](amount)
+    - [75](amount)
