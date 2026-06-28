@@ -33,3 +33,10 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Archivos de entorno reales (no los .example)
+.env.chatwoot
+
+# Documentos locales de referencia (no van al repo)
+docs/local/
+*.local.md
