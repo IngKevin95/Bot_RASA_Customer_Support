@@ -6,7 +6,7 @@ O con cobertura: pytest tests/test_actions.py --cov=actions --cov-report=term-mi
 """
 
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from rasa_sdk.events import SlotSet
 
 from actions.actions import (
@@ -15,6 +15,7 @@ from actions.actions import (
     ActionEscalateAgent,
     MOCK_ACCOUNTS,
 )
+from actions.providers.base import EscalationResult
 from tests.conftest import make_tracker
 
 
@@ -130,9 +131,20 @@ class TestActionProcessPayment:
 class TestActionEscalateAgent:
     """Tests para action_escalate_agent."""
 
+    def _mock_provider(self, success=True):
+        provider = MagicMock()
+        provider.escalate.return_value = EscalationResult(
+            success=success,
+            provider="stub",
+            message="ok" if success else "error",
+            ticket_id="test-001" if success else None,
+        )
+        return provider
+
     def test_escalado_retorna_mensaje_confirmacion(self, dispatcher, domain):
         tracker = make_tracker(sender_id="session_abc_123")
-        events = ActionEscalateAgent().run(dispatcher, tracker, domain)
+        with patch("actions.actions.get_provider", return_value=self._mock_provider()):
+            events = ActionEscalateAgent().run(dispatcher, tracker, domain)
 
         mensajes = " ".join(m.get("text", "") for m in dispatcher.messages)
         assert "agente humano" in mensajes
@@ -140,17 +152,39 @@ class TestActionEscalateAgent:
 
     def test_mensaje_incluye_tiempo_espera(self, dispatcher, domain):
         tracker = make_tracker()
-        ActionEscalateAgent().run(dispatcher, tracker, domain)
+        with patch("actions.actions.get_provider", return_value=self._mock_provider()):
+            ActionEscalateAgent().run(dispatcher, tracker, domain)
 
         mensajes = " ".join(m.get("text", "") for m in dispatcher.messages)
         assert "minuto" in mensajes
 
+    def test_escalado_llama_al_provider(self, dispatcher, domain):
+        tracker = make_tracker(sender_id="sesion_test")
+        mock_provider = self._mock_provider()
+        with patch("actions.actions.get_provider", return_value=mock_provider):
+            ActionEscalateAgent().run(dispatcher, tracker, domain)
+
+        mock_provider.escalate.assert_called_once()
+        call_args = mock_provider.escalate.call_args
+        assert call_args.kwargs["session_id"] == "sesion_test"
+
     def test_escalado_no_modifica_slots(self, dispatcher, domain):
         tracker = make_tracker({"account_number": "1234567"})
-        events = ActionEscalateAgent().run(dispatcher, tracker, domain)
+        with patch("actions.actions.get_provider", return_value=self._mock_provider()):
+            events = ActionEscalateAgent().run(dispatcher, tracker, domain)
 
         slot_events = [e for e in events if isinstance(e, dict) and e.get("event") == "slot"]
         assert slot_events == []
+
+    def test_escalado_falla_silenciosamente(self, dispatcher, domain):
+        """Si el provider falla, el bot igual responde al usuario."""
+        tracker = make_tracker()
+        with patch("actions.actions.get_provider", return_value=self._mock_provider(success=False)):
+            events = ActionEscalateAgent().run(dispatcher, tracker, domain)
+
+        mensajes = " ".join(m.get("text", "") for m in dispatcher.messages)
+        assert "agente humano" in mensajes
+        assert events == []
 
     def test_nombre_accion_correcto(self):
         assert ActionEscalateAgent().name() == "action_escalate_agent"
