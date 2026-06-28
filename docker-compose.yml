@@ -1,0 +1,33 @@
+version: "3.9"
+
+# Uso local: docker compose up
+# Levanta rasa + action server juntos
+
+services:
+  action-server:
+    build: .
+    command: rasa run actions --port 5055
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./actions:/app/actions
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  rasa:
+    build: .
+    command: >
+      rasa run
+        --enable-api
+        --cors "*"
+        --port 5005
+        --endpoints endpoints.yml
+        --credentials credentials.yml
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./models:/app/models
+    depends_on:
+      - action-server
+    environment:
+      - PYTHONUNBUFFERED=1
