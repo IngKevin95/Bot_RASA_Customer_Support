@@ -91,6 +91,12 @@ class ActionProcessPayment(Action):
             )
             return []
 
+        if amount <= 0:
+            dispatcher.utter_message(
+                text="El monto debe ser mayor a cero. Ingresa un valor valido."
+            )
+            return []
+
         logger.info("Procesando pago de $%.2f en cuenta %s", amount, account)
 
         # En produccion: llamada a API de pagos
