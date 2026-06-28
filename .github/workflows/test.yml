@@ -26,7 +26,7 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Run unit tests with coverage
-        run: pytest tests/test_actions.py --cov=actions --cov-report=term-missing --cov-fail-under=80
+        run: pytest tests/ --cov=actions --cov-report=term-missing --cov-fail-under=80
 
   validate-data:
     name: Validate RASA Data
