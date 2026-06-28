@@ -1,3 +1,15 @@
+# Deploy a GCP Cloud Run
+#
+# PREREQUISITOS — leer docs/gcp-setup.md antes de activar este workflow.
+#
+# Secrets requeridos en Settings > Secrets and variables > Actions:
+#   GCP_PROJECT_ID  — ID del proyecto GCP (ej: "mi-proyecto-123")
+#   GCP_SA_KEY      — JSON completo de la clave del Service Account
+#
+# El workflow falla con "must specify exactly one of workload_identity_provider
+# or credentials_json" cuando GCP_SA_KEY no esta configurado.
+# Ver docs/gcp-setup.md para el paso a paso de creacion del SA y la clave.
+
 name: Deploy to GCP Cloud Run
 
 on:
