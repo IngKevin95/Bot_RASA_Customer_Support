@@ -114,6 +114,15 @@ class TestActionProcessPayment:
         assert "valido" in mensajes
         assert events == []
 
+    @pytest.mark.parametrize("monto_invalido", ["-50", "-0.01", "0", "0.0"])
+    def test_monto_no_positivo_rechazado(self, dispatcher, domain, monto_invalido):
+        tracker = make_tracker({"account_number": "1234567", "amount": monto_invalido})
+        events = ActionProcessPayment().run(dispatcher, tracker, domain)
+
+        mensajes = " ".join(m.get("text", "") for m in dispatcher.messages)
+        assert "mayor a cero" in mensajes
+        assert events == []
+
     def test_nombre_accion_correcto(self):
         assert ActionProcessPayment().name() == "action_process_payment"
 
