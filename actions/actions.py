@@ -6,11 +6,14 @@ a APIs reales (bancaria, pagos). Aqui usan datos simulados.
 """
 
 import logging
+import os
 from typing import Any, Dict, List, Text
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
+
+from actions.providers import get_provider
 
 logger = logging.getLogger(__name__)
 
@@ -130,8 +133,27 @@ class ActionEscalateAgent(Action):
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
 
+        logger.info("Escalando a agente humano. Sender: %s", tracker.sender_id)
+
+        queue = os.getenv("ESCALATION_QUEUE", "soporte_general")
+        provider = get_provider()
+
+        context = {
+            "genesys_conversation_id": tracker.get_slot("genesys_conversation_id") or "",
+            "genesys_participant_id": tracker.get_slot("genesys_participant_id") or "",
+        }
+
+        result = provider.escalate(
+            session_id=tracker.sender_id,
+            queue=queue,
+            context=context,
+        )
+
         logger.info(
-            "Escalando a agente humano. Sender: %s", tracker.sender_id
+            "Escalación via %s — success=%s ticket=%s",
+            result.provider,
+            result.success,
+            result.ticket_id,
         )
 
         dispatcher.utter_message(
@@ -141,11 +163,5 @@ class ActionEscalateAgent(Action):
                 "Gracias por tu paciencia."
             )
         )
-
-        # En produccion: trigger Genesys Cloud transfer API
-        # genesys_client.transfer_conversation(
-        #     conversation_id=tracker.sender_id,
-        #     queue="soporte_general"
-        # )
 
         return []

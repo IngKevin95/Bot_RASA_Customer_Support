@@ -24,6 +24,10 @@ env:
 
 jobs:
   deploy:
+    # Deshabilitado: requiere secrets GCP configurados (ver docs/gcp-setup.md)
+    # Para reactivar: configurar GCP_PROJECT_ID y GCP_SA_KEY en Settings > Secrets and variables > Actions
+    # y eliminar la linea "if: false" de abajo.
+    if: false
     name: Build & Deploy
     runs-on: ubuntu-latest
 
